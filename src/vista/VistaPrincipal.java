@@ -1,60 +1,113 @@
 package vista;
 
 import javax.swing.*;
-import java.awt.event.*;
+import java.awt.*;
 
-public class VistaPrincipal extends JDialog {
-    private JPanel contentPane;
-    private JButton buttonOK;
-    private JButton buttonCancel;
+public class VistaPrincipal extends JFrame {
+
+    private JPanel panelContenido;
+    private CardLayout cardLayout;
 
     public VistaPrincipal() {
-        setContentPane(contentPane);
-        setModal(true);
-        getRootPane().setDefaultButton(buttonOK);
-
-        buttonOK.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onOK();
-            }
-        });
-
-        buttonCancel.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        });
-
-        // call onCancel() when cross is clicked
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                onCancel();
-            }
-        });
-
-        // call onCancel() on ESCAPE
-        contentPane.registerKeyboardAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        inicializarUI();
     }
 
-    private void onOK() {
-        // add your code here
-        dispose();
+    private void inicializarUI() {
+        setTitle("Sistema Hotel Las Brisas");
+        setSize(800, 600); // Tamaño inicial
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null); // Centrar en pantalla
+
+        // Usamos CardLayout para intercambiar entre el menú y las otras pantallas
+        cardLayout = new CardLayout();
+        panelContenido = new JPanel(cardLayout);
+
+        // 1. Crear las "Cartas" (Paneles)
+        JPanel panelMenu = crearPanelMenu();
+        JPanel panelReserva = crearPanelSimulado("Módulo de Reserva de Habitación", new Color(230, 240, 255));
+        JPanel panelCafeteria = crearPanelSimulado("Módulo de Venta en Cafetería", new Color(255, 250, 200));
+
+        // 2. Añadirlas al contenedor principal con un nombre clave
+        panelContenido.add(panelMenu, "MENU");
+        panelContenido.add(panelReserva, "RESERVA");
+        panelContenido.add(panelCafeteria, "CAFETERIA");
+
+        // Agregamos el panel contenedor a la ventana
+        add(panelContenido);
     }
 
-    private void onCancel() {
-        // add your code here if necessary
-        dispose();
+    // --- Creador del Menú Principal ---
+    private JPanel crearPanelMenu() {
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBackground(Color.WHITE);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(15, 15, 15, 15); // Espacio entre elementos
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        // Título
+        JLabel titulo = new JLabel("Bienvenido al Hotel", SwingConstants.CENTER);
+        titulo.setFont(new Font("Segoe UI", Font.BOLD, 28));
+        gbc.gridx = 0; gbc.gridy = 0;
+        panel.add(titulo, gbc);
+
+        // Botón Reserva
+        JButton btnReserva = crearBotonEstilizado("Reserva de Habitación");
+        btnReserva.addActionListener(e -> mostrarVista("RESERVA")); // Acción cambiar vista
+        gbc.gridy = 1;
+        panel.add(btnReserva, gbc);
+
+        // Botón Cafetería
+        JButton btnCafeteria = crearBotonEstilizado("Venta en Cafetería");
+        btnCafeteria.addActionListener(e -> mostrarVista("CAFETERIA")); // Acción cambiar vista
+        gbc.gridy = 2;
+        panel.add(btnCafeteria, gbc);
+
+        // Botón Salir
+        JButton btnSalir = crearBotonEstilizado("Salir");
+        btnSalir.setBackground(new Color(255, 100, 100)); // Rojo suave
+        btnSalir.setForeground(Color.WHITE);
+        btnSalir.addActionListener(e -> System.exit(0));
+        gbc.gridy = 3;
+        panel.add(btnSalir, gbc);
+
+        return panel;
     }
 
-    public static void main(String[] args) {
-        VistaPrincipal dialog = new VistaPrincipal();
-        dialog.pack();
-        dialog.setVisible(true);
-        System.exit(0);
+    // --- Método auxiliar para crear botones bonitos ---
+    private JButton crearBotonEstilizado(String texto) {
+        JButton btn = new JButton(texto);
+        btn.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+        btn.setPreferredSize(new Dimension(300, 50));
+        btn.setFocusPainted(false);
+        return btn;
     }
+
+    // --- Método para simular las pantallas vacías de Reserva y Cafetería ---
+    // (Esto reemplaza a tus clases externas por ahora para que el código funcione)
+    private JPanel crearPanelSimulado(String tituloTexto, Color colorFondo) {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(colorFondo);
+
+        JLabel lblTitulo = new JLabel(tituloTexto, SwingConstants.CENTER);
+        lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 30));
+        panel.add(lblTitulo, BorderLayout.CENTER);
+
+        JButton btnVolver = new JButton("Volver al Menú Principal");
+        btnVolver.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        btnVolver.setPreferredSize(new Dimension(200, 50));
+
+        // Acción para volver
+        btnVolver.addActionListener(e -> mostrarVista("MENU"));
+
+        panel.add(btnVolver, BorderLayout.SOUTH);
+
+        return panel;
+    }
+
+    // Método para cambiar entre pantallas (CardLayout)
+    public void mostrarVista(String nombreVista) {
+        cardLayout.show(panelContenido, nombreVista);
+    }
+
 }
