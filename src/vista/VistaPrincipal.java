@@ -35,17 +35,14 @@ public class VistaPrincipal extends JFrame {
         JPanel panelMenu = crearPanelMenu();
 
         // 2. Panel de Reservas (Módulo Hotel)
-        // Asegúrate de tener la clase PanelReserva creada anteriormente
         PanelReserva panelReserva = new PanelReserva(ctrlHotel, this);
 
         // 3. Panel de Cafetería (Módulo Cafetería)
-        // Usamos PanelVenta que creamos para la cafetería
         PanelVenta panelCafeteria = new PanelVenta(ctrlCafeteria, this);
 
         // 4. Panel de Inventario (Opcional, usando el controlador de cafetería)
         PanelInventario panelInventario = new PanelInventario(ctrlCafeteria, this);
 
-        // --- Agregar paneles al contenedor ---
         panelContenido.add(panelMenu, "MENU");
         panelContenido.add(panelReserva, "RESERVA");
         panelContenido.add(panelCafeteria, "CAFETERIA");
@@ -63,7 +60,7 @@ public class VistaPrincipal extends JFrame {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0;
 
-        // Título y Logo (Texto)
+        // Título y Logo
         JLabel titulo = new JLabel("Hotel Las Brisas", SwingConstants.CENTER);
         titulo.setFont(new Font("Rockwell", Font.BOLD, 75));
         titulo.setForeground(new Color(40, 60, 100));

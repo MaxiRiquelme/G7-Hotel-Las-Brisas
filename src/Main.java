@@ -1,12 +1,12 @@
 import controlador.ControladorHotel;
 import controlador.ControladorCafeteria;
+import controlador.GestorDatos;
 import vista.VistaPrincipal;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 public class Main {
     public static void main(String[] args) {
-        // Estilo nativo del sistema operativo
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
@@ -14,11 +14,14 @@ public class Main {
         }
 
         SwingUtilities.invokeLater(() -> {
-            // Inicializamos los controladores de cada módulo
+            // Obtener la instancia única de GestorDatos (carga datos automáticamente)
+            GestorDatos gestor = GestorDatos.obtenerInstancia();
+
+            // Crear controladores que usan la misma instancia de GestorDatos
             ControladorHotel ctrlHotel = new ControladorHotel();
             ControladorCafeteria ctrlCafeteria = new ControladorCafeteria();
 
-            // Iniciamos la vista principal pasando ambos controladores
+            // Inicia la vista principal
             VistaPrincipal vista = new VistaPrincipal(ctrlHotel, ctrlCafeteria);
             vista.setVisible(true);
         });

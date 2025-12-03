@@ -1,6 +1,8 @@
 package vista;
 
+import controlador.ActualizacionListener;
 import controlador.ControladorCafeteria;
+import controlador.ActualizacionListener;
 import modelo.Producto;
 
 import javax.swing.*;
@@ -8,12 +10,12 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
-public class PanelInventario extends JPanel {
-    private ControladorCafeteria controlador; // 2. Actualizar el tipo de variable
+public class PanelInventario extends JPanel implements ActualizacionListener {
+    private ControladorCafeteria controlador;
     private VistaPrincipal mainFrame;
     private DefaultTableModel modelo;
+    private JTable tabla;
 
-    // 3. Actualizar el constructor para recibir ControladorCafeteria
     public PanelInventario(ControladorCafeteria ctrl, VistaPrincipal frame) {
         this.controlador = ctrl;
         this.mainFrame = frame;
@@ -27,10 +29,10 @@ public class PanelInventario extends JPanel {
 
         // --- Tabla Central ---
         modelo = new DefaultTableModel(new String[]{"ID", "Nombre", "Precio", "Stock"}, 0) {
-            @Override // Hacer que las celdas no sean editables directamente
+            @Override
             public boolean isCellEditable(int row, int column) { return false; }
         };
-        JTable tabla = new JTable(modelo);
+        tabla = new JTable(modelo);
         add(new JScrollPane(tabla), BorderLayout.CENTER);
 
         // --- Botones Inferiores ---
@@ -44,14 +46,35 @@ public class PanelInventario extends JPanel {
         panelBotones.add(btnAgregar);
         panelBotones.add(btnStock);
         add(panelBotones, BorderLayout.SOUTH);
+
+        // Registrar listener para actualizaciones automáticas
+        controlador.agregarListener(this);
+
+        // Cargar datos iniciales
+        actualizarTabla();
+    }
+
+    @Override
+    public void onActualizacion(String tipo) {
+        if (tipo.equals("PRODUCTOS")) {
+            SwingUtilities.invokeLater(() -> actualizarTabla());
+        }
+    }
+
+    private void refrescarTabla() {
+        modelo.setRowCount(0);
+        for (Producto p : controlador.obtenerProductos()) {
+            modelo.addRow(new Object[]{
+                    p.getIdProducto(),
+                    p.getNombre(),
+                    p.getPrecio(),
+                    p.getStock()
+            });
+        }
     }
 
     public void actualizarTabla() {
-        modelo.setRowCount(0);
-        // El controlador de cafetería debe tener el método obtenerProductos()
-        for (Producto p : controlador.obtenerProductos()) {
-            modelo.addRow(new Object[]{p.getIdProducto(), p.getNombre(), p.getPrecio(), p.getStock()});
-        }
+        refrescarTabla();
     }
 
     private void agregarProducto() {
@@ -71,10 +94,10 @@ public class PanelInventario extends JPanel {
                         Integer.parseInt(txtPre.getText()),
                         Integer.parseInt(txtStk.getText())
                 );
-                actualizarTabla();
+                refrescarTabla();
                 JOptionPane.showMessageDialog(this, "Producto agregado exitosamente.");
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error: Datos inválidos. Verifique que precio y stock sean números.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -86,11 +109,11 @@ public class PanelInventario extends JPanel {
             try {
                 if (cant != null) {
                     controlador.aumentarStock(id, Integer.parseInt(cant));
-                    actualizarTabla();
+                    refrescarTabla();
                     JOptionPane.showMessageDialog(this, "Stock actualizado.");
                 }
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error al actualizar stock. Verifique el ID y la cantidad.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }

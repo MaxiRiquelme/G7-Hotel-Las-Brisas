@@ -1,4 +1,7 @@
-package modelo;
+package sinUso;
+
+import modelo.Empleado;
+import modelo.Producto;
 
 import java.io.Serializable;
 //esta clase está en el diagrama de clases me parece que no se implementará para este proyecto.

@@ -1,4 +1,4 @@
-package modelo;
+package sinUso;
 
 import java.io.Serializable;
 
