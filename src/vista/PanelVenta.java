@@ -102,7 +102,7 @@ public class PanelVenta extends JPanel {
         modeloTablaProd.setRowCount(0);
         List<Producto> lista = controlador.buscarProductos(txtBuscar.getText());
         for (Producto p : lista) {
-            modeloTablaProd.addRow(new Object[]{p.getId(), p.getNombre(), p.getPrecio(), p.getStock()});
+            modeloTablaProd.addRow(new Object[]{p.getIdProducto(), p.getNombre(), p.getPrecio(), p.getStock()});
         }
     }
 

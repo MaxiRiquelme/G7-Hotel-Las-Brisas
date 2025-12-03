@@ -50,7 +50,7 @@ public class PanelInventario extends JPanel {
         modelo.setRowCount(0);
         // El controlador de cafetería debe tener el método obtenerProductos()
         for (Producto p : controlador.obtenerProductos()) {
-            modelo.addRow(new Object[]{p.getId(), p.getNombre(), p.getPrecio(), p.getStock()});
+            modelo.addRow(new Object[]{p.getIdProducto(), p.getNombre(), p.getPrecio(), p.getStock()});
         }
     }
 

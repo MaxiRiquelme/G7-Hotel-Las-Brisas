@@ -5,29 +5,63 @@ import java.io.Serializable;
 public class Habitacion implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private String numero;
-    private String tipo; // "Single", "Matrimonial", "Suite"
-    private int precioNoche;
-    private boolean disponible;
+    private Integer numero;
+    private String tipo;
+    private Double precio;
+    private String estado;
+    private Integer capacidad;
 
-    public Habitacion(String numero, String tipo, int precioNoche) {
+    public Habitacion(Integer numero, String tipo, Double precio, String estado, Integer capacidad) {
         this.numero = numero;
         this.tipo = tipo;
-        this.precioNoche = precioNoche;
-        this.disponible = true; // Por defecto disponible
+        this.precio = precio;
+        this.estado = estado;
+        this.capacidad = capacidad;
     }
 
-    public String getNumero() { return numero; }
-    public String getTipo() { return tipo; }
-    public int getPrecioNoche() { return precioNoche; }
-    public boolean isDisponible() { return disponible; }
-
-    public void setDisponible(boolean disponible) {
-        this.disponible = disponible;
+    public Integer getNumero() {
+        return numero;
     }
 
-    @Override
-    public String toString() {
-        return "Habitación " + numero + " (" + tipo + ")";
+    public void setNumero(Integer numero) {
+        this.numero = numero;
     }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public Double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(Double precio) {
+        this.precio = precio;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public Integer getCapacidad() {
+        return capacidad;
+    }
+
+    public void setCapacidad(Integer capacidad) {
+        this.capacidad = capacidad;
+    }
+
+    public void actualizarEstadisticas(String estado) {}
+    public void confirmarDisponibilidad(java.util.Date fecha) {}
+    public void asignarPorSolicitud(String solicitud) {}
+    public void calcularComisionBase(Double comision) {}
+    public void consultarHistorico(String historico) {}
 }

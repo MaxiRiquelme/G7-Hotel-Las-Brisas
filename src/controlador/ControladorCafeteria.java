@@ -71,12 +71,12 @@ public class ControladorCafeteria {
     public List<Producto> buscarProductos(String consulta) {
         String lower = consulta.toLowerCase();
         return productos.stream()
-                .filter(p -> p.getNombre().toLowerCase().contains(lower) || p.getId().toLowerCase().contains(lower))
+                .filter(p -> p.getNombre().toLowerCase().contains(lower) || p.getIdProducto().toLowerCase().contains(lower))
                 .collect(Collectors.toList());
     }
 
     public Producto buscarProductoPorId(String id) {
-        return productos.stream().filter(p -> p.getId().equals(id)).findFirst().orElse(null);
+        return productos.stream().filter(p -> p.getIdProducto().equals(id)).findFirst().orElse(null);
     }
 
     public void agregarProductoNuevo(String id, String nombre, int precio, int stock) {
@@ -97,7 +97,7 @@ public class ControladorCafeteria {
         if (p.getStock() < cantidad) throw new Exception("Stock insuficiente.");
         boolean encontrado = false;
         for (DetalleVenta d : carritoActual) {
-            if (d.getProducto().getId().equals(p.getId())) {
+            if (d.getProducto().getIdProducto().equals(p.getIdProducto())) {
                 if (d.getCantidad() + cantidad > p.getStock()) throw new Exception("Stock insuficiente.");
                 // Truco para actualizar: removemos y agregamos de nuevo o mutamos (aquí simplificado)
                 int nuevaCant = d.getCantidad() + cantidad;

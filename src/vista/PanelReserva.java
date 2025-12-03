@@ -143,8 +143,8 @@ public class PanelReserva extends JPanel {
         sb.append("=== COMPROBANTE DE RESERVA ===\n");
         sb.append("Hotel Las Brisas\n");
         sb.append("------------------------------\n");
-        sb.append("Reserva ID: ").append(r.getId()).append("\n");
-        sb.append("Huésped: ").append(r.getCliente().getNombre()).append("\n");
+        sb.append("Reserva ID: ").append(r.getIdReserva()).append("\n");
+        sb.append("Huésped: ").append(r.getHuesped().getNombre()).append("\n"); //ToDo
         sb.append("Habitación: ").append(r.getHabitacion().getNumero()).append("\n");
         sb.append("Total: $").append(r.getTotalPagado()).append("\n");
         sb.append("------------------------------\n");
