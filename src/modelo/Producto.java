@@ -16,45 +16,39 @@ public class Producto implements Serializable {
         this.nombre = nombre;
         this.precio = precio;
         this.stock = stock;
-        this.categoria = categoria;
+        this.categoria = "General";
     }
 
-    public String getIdProducto() {
-        return idProducto;
+    public String getIdProducto() { return idProducto; }
+    public void setIdProducto(String idProducto) { this.idProducto = idProducto; }
+
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
+
+    public int getPrecio() { return precio; }
+    public void setPrecio(int precio) { this.precio = precio; }
+
+    public int getStock() { return stock; }
+    public void setStock(int stock) { this.stock = stock; }
+
+    public String getCategoria() { return categoria; }
+    public void setCategoria(String categoria) { this.categoria = categoria; }
+
+    public void disminuirStock(int cantidad) {
+        if (this.stock >= cantidad) {
+            this.stock -= cantidad;
+        }
     }
 
-    public void setIdProducto(String idProducto) {
-        this.idProducto = idProducto;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public int getPrecio() {
-        return precio;
-    }
-
-    public void setPrecio(int precio) {
-        this.precio = precio;
-    }
-
-    public int getStock() {
-        return stock;
-    }
-
-    public void setStock(int stock) {
-        this.stock = stock;
+    public void agregarStock(int cantidad) {
+        this.stock += cantidad;
     }
 
     public int calcularPrecio(int cantidad) {
         return this.precio * cantidad;
     }
-    public void actualizarStock(){}
+
+    public void actualizarStock() {}
 
     @Override
     public String toString() {

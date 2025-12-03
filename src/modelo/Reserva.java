@@ -7,73 +7,53 @@ public class Reserva implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String idReserva;
-    private String diAlojamiento;
+    private Huesped huesped;
+    private Habitacion habitacion;
     private Date fechaEntrada;
     private Date fechaSalida;
     private String estado;
-    private Integer numeroHuespedes;
+    private Double totalPagado;
+    private String metodoPago;
 
-    public Reserva(String idReserva, Integer numeroHuespedes, String estado, Date fechaSalida, Date fechaEntrada, String diAlojamiento) {
+    public Reserva(String idReserva, Huesped huesped, Habitacion habitacion,
+                   Date fechaEntrada, Double totalPagado, String metodoPago) {
         this.idReserva = idReserva;
-        this.numeroHuespedes = numeroHuespedes;
-        this.estado = estado;
-        this.fechaSalida = fechaSalida;
+        this.huesped = huesped;
+        this.habitacion = habitacion;
         this.fechaEntrada = fechaEntrada;
-        this.diAlojamiento = diAlojamiento;
+        this.fechaSalida = null;
+        this.estado = "ACTIVA";
+        this.totalPagado = totalPagado;
+        this.metodoPago = metodoPago;
     }
 
-    public String getIdReserva() {
-        return idReserva;
-    }
+    public String getIdReserva() { return idReserva; }
+    public void setIdReserva(String idReserva) { this.idReserva = idReserva; }
 
-    public void setIdReserva(String idReserva) {
-        this.idReserva = idReserva;
-    }
+    public Huesped getHuesped() { return huesped; }
+    public void setHuesped(Huesped huesped) { this.huesped = huesped; }
 
-    public String getDiAlojamiento() {
-        return diAlojamiento;
-    }
+    public Habitacion getHabitacion() { return habitacion; }
+    public void setHabitacion(Habitacion habitacion) { this.habitacion = habitacion; }
 
-    public void setDiAlojamiento(String diAlojamiento) {
-        this.diAlojamiento = diAlojamiento;
-    }
+    public Date getFechaEntrada() { return fechaEntrada; }
+    public void setFechaEntrada(Date fechaEntrada) { this.fechaEntrada = fechaEntrada; }
 
-    public Date getFechaEntrada() {
-        return fechaEntrada;
-    }
+    public Date getFechaSalida() { return fechaSalida; }
+    public void setFechaSalida(Date fechaSalida) { this.fechaSalida = fechaSalida; }
 
-    public void setFechaEntrada(Date fechaEntrada) {
-        this.fechaEntrada = fechaEntrada;
-    }
+    public String getEstado() { return estado; }
+    public void setEstado(String estado) { this.estado = estado; }
 
-    public Date getFechaSalida() {
-        return fechaSalida;
-    }
+    public Double getTotalPagado() { return totalPagado; }
+    public void setTotalPagado(Double totalPagado) { this.totalPagado = totalPagado; }
 
-    public void setFechaSalida(Date fechaSalida) {
-        this.fechaSalida = fechaSalida;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
-
-    public Integer getNumeroHuespedes() {
-        return numeroHuespedes;
-    }
-
-    public void setNumeroHuespedes(Integer numeroHuespedes) {
-        this.numeroHuespedes = numeroHuespedes;
-    }
+    public String getMetodoPago() { return metodoPago; }
+    public void setMetodoPago(String metodoPago) { this.metodoPago = metodoPago; }
 
     public void calcularCostoTotal() {}
     public void verificarDisponibilidad(Habitacion habitacion) {}
-    public void registrarReserva(Reserva reserva, Integer habitacion) {}
+    public void registrarReserva(Reserva reserva, Habitacion habitacion) {}
     public void verificarEstado(String estado) {}
     public void solicitar(String solicitud) {}
-    public void solicitar(Integer pedido, String cocina) {}
 }
