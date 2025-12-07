@@ -1,6 +1,7 @@
 package modelo;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Habitacion implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -10,6 +11,7 @@ public class Habitacion implements Serializable {
     private Double precio;
     private String estado;
     private Integer capacidad;
+    private Date fechaDesocupacion;
 
     // Constructor
     public Habitacion(String numero, String tipo, Double precio) {
@@ -18,6 +20,7 @@ public class Habitacion implements Serializable {
         this.precio = precio;
         this.estado = "DISPONIBLE";
         this.capacidad = obtenerCapacidad(tipo);
+        this.fechaDesocupacion = null;
     }
 
     private Integer obtenerCapacidad(String tipo) {
@@ -44,12 +47,18 @@ public class Habitacion implements Serializable {
 
     public Integer getCapacidad() { return capacidad; }
 
+    public Date getFechaDesocupacion() { return fechaDesocupacion; }
+    public void setFechaDesocupacion(Date fechaDesocupacion) { this.fechaDesocupacion = fechaDesocupacion; }
+
     public boolean isDisponible() {
         return estado.equals("DISPONIBLE");
     }
 
     public void setDisponible(boolean disponible) {
         this.estado = disponible ? "DISPONIBLE" : "OCUPADA";
+        if (disponible) {
+            this.fechaDesocupacion = null;
+        }
     }
 
     // Métodos del diagrama

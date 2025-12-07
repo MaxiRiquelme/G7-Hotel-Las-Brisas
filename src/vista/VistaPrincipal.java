@@ -16,6 +16,10 @@ public class VistaPrincipal extends JFrame {
     public VistaPrincipal(ControladorHotel ctrlHotel, ControladorCafeteria ctrlCafeteria) {
         this.ctrlHotel = ctrlHotel;
         this.ctrlCafeteria = ctrlCafeteria;
+
+        // Activar reservas pendientes que correspondan a hoy
+        ctrlHotel.activarReservasPendientes();
+
         inicializarUI();
     }
 

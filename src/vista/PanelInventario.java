@@ -38,13 +38,16 @@ public class PanelInventario extends JPanel implements ActualizacionListener {
         // --- Botones Inferiores ---
         JPanel panelBotones = new JPanel();
         JButton btnAgregar = new JButton("Nuevo Producto");
-        JButton btnStock = new JButton("Aumentar Stock");
+        JButton btnAumentarStock = new JButton("Aumentar Stock");
+        JButton btnReducirStock = new JButton("Reducir Stock");
 
         btnAgregar.addActionListener(e -> agregarProducto());
-        btnStock.addActionListener(e -> aumentarStock());
+        btnAumentarStock.addActionListener(e -> aumentarStock());
+        btnReducirStock.addActionListener(e -> reducirStock());
 
         panelBotones.add(btnAgregar);
-        panelBotones.add(btnStock);
+        panelBotones.add(btnAumentarStock);
+        panelBotones.add(btnReducirStock);
         add(panelBotones, BorderLayout.SOUTH);
 
         // Registrar listener para actualizaciones automáticas
@@ -111,6 +114,22 @@ public class PanelInventario extends JPanel implements ActualizacionListener {
                     controlador.aumentarStock(id, Integer.parseInt(cant));
                     refrescarTabla();
                     JOptionPane.showMessageDialog(this, "Stock actualizado.");
+                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void reducirStock() {
+        String id = JOptionPane.showInputDialog(this, "Ingrese ID del producto:");
+        if (id != null && !id.trim().isEmpty()) {
+            String cant = JOptionPane.showInputDialog(this, "Cantidad a reducir:");
+            try {
+                if (cant != null) {
+                    controlador.disminuirStock(id, Integer.parseInt(cant));
+                    refrescarTabla();
+                    JOptionPane.showMessageDialog(this, "Stock reducido exitosamente.");
                 }
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

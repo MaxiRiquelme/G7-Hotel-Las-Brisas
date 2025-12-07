@@ -1,5 +1,6 @@
 package vista;
 
+import controlador.ActualizacionListener;
 import controlador.ControladorCafeteria;
 import modelo.Huesped;
 import modelo.DetalleVenta;
@@ -14,7 +15,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.List;
 
-public class PanelVenta extends JPanel {
+public class PanelVenta extends JPanel implements ActualizacionListener {
     private ControladorCafeteria controlador;
     private VistaPrincipal mainFrame;
     private JTextField txtBuscar;
@@ -95,7 +96,17 @@ public class PanelVenta extends JPanel {
         bottomPanel.add(btnPagar);
         add(bottomPanel, BorderLayout.SOUTH);
 
+        // Registrar listener para actualizaciones automáticas
+        controlador.agregarListener(this);
+
         buscarProductos();
+    }
+
+    @Override
+    public void onActualizacion(String tipo) {
+        if (tipo.equals("PRODUCTOS")) {
+            SwingUtilities.invokeLater(() -> buscarProductos());
+        }
     }
 
     private void buscarProductos() {
