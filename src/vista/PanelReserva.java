@@ -116,12 +116,31 @@ public class PanelReserva extends JPanel {
 
         String numHabitacion = (String) modeloTabla.getValueAt(row, 0);
         String estado = (String) modeloTabla.getValueAt(row, 3);
+        String rangoOcupacion = (String) modeloTabla.getValueAt(row, 4);
 
-        // Verificar que la habitación esté disponible
-        if (!estado.equals("DISPONIBLE")) {
-            JOptionPane.showMessageDialog(this, "La habitación seleccionada no está disponible.",
-                    "Habitación Ocupada", JOptionPane.WARNING_MESSAGE);
-            return;
+        // Si la habitación está ocupada, informar y sugerir reserva futura
+        boolean habitacionOcupada = estado.equals("OCUPADA");
+
+        if (habitacionOcupada) {
+            int respuesta = JOptionPane.showConfirmDialog(this,
+                    "La habitación está actualmente OCUPADA.\n\n" +
+                    "Períodos ocupados:\n" + rangoOcupacion + "\n\n" +
+                    "¿Desea hacer una reserva para una fecha futura disponible?",
+                    "Habitación Ocupada - Reserva Futura",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
+
+            if (respuesta != JOptionPane.YES_OPTION) {
+                return;
+            }
+
+            // Si acepta, mostrar mensaje informativo
+            JOptionPane.showMessageDialog(this,
+                    "Procederá a agendar una reserva futura.\n\n" +
+                    "Asegúrese de seleccionar fechas que NO se solapen con:\n" +
+                    rangoOcupacion,
+                    "Información",
+                    JOptionPane.INFORMATION_MESSAGE);
         }
 
         String precioStr = (String) modeloTabla.getValueAt(row, 2);
@@ -173,19 +192,28 @@ public class PanelReserva extends JPanel {
         }
 
         // Paso 2: Fecha de entrada (inmediata o agendada)
-        String[] opcionesFecha = {"Entrada Inmediata (Hoy)", "Agendar Fecha de Entrada"};
-        int tipoReserva = JOptionPane.showOptionDialog(this,
-                "¿Cuándo será la entrada?", "Tipo de Reserva",
-                JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
-                null, opcionesFecha, opcionesFecha[0]);
-
-        if (tipoReserva == -1) return;
-
         Date fechaEntrada = new Date(); // Por defecto, hoy
+        int tipoReserva = 0; // 0 = inmediata, 1 = agendada
 
-        if (tipoReserva == 1) { // Agendar fecha futura
+        // Si la habitación está ocupada, SOLO permitir reserva futura
+        if (habitacionOcupada) {
             fechaEntrada = seleccionarFechaEntrada();
             if (fechaEntrada == null) return; // Usuario canceló
+            tipoReserva = 1; // Marcar como agendada
+        } else {
+            // Si está disponible, dar opción
+            String[] opcionesFecha = {"Entrada Inmediata (Hoy)", "Agendar Fecha de Entrada"};
+            tipoReserva = JOptionPane.showOptionDialog(this,
+                    "¿Cuándo será la entrada?", "Tipo de Reserva",
+                    JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
+                    null, opcionesFecha, opcionesFecha[0]);
+
+            if (tipoReserva == -1) return;
+
+            if (tipoReserva == 1) { // Agendar fecha futura
+                fechaEntrada = seleccionarFechaEntrada();
+                if (fechaEntrada == null) return; // Usuario canceló
+            }
         }
 
         // Paso 3: Periodo de estadía (días)

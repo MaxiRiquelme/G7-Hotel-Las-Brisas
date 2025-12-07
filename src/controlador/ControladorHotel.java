@@ -198,7 +198,39 @@ public class ControladorHotel {
             throw new Exception("Los días adicionales deben ser mayor a 0.");
         }
 
+        // Calcular la nueva fecha de salida
         int nuevosDias = reserva.getDiasEstadia() + diasAdicionales;
+        long milisegundos = reserva.getFechaEntrada().getTime() + ((long) nuevosDias * 24 * 60 * 60 * 1000);
+        Date nuevaFechaSalida = new Date(milisegundos);
+
+        // Verificar que la extensión no se solape con otras reservas
+        for (Reserva r : reservas) {
+            // Ignorar la reserva actual y solo verificar otras reservas de la misma habitación
+            if (!r.getIdReserva().equals(reserva.getIdReserva()) &&
+                r.getHabitacion().getNumero().equals(numHabitacion) &&
+                (r.getEstado().equals("ACTIVA") || r.getEstado().equals("PENDIENTE"))) {
+
+                Date entradaOtraReserva = r.getFechaEntrada();
+                Date salidaOtraReserva = r.getFechaSalida();
+
+                // Verificar si la nueva fecha de salida se solapa con otra reserva
+                // Solapamiento ocurre si: nueva_salida > entrada_otra_reserva
+                if (nuevaFechaSalida.after(entradaOtraReserva)) {
+                    SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                    throw new Exception(
+                        "No se puede extender la estadía.\n\n" +
+                        "La extensión causaría un conflicto con otra reserva:\n" +
+                        "Cliente: " + r.getHuesped().getNombre() + " " + r.getHuesped().getApellido() + "\n" +
+                        "Entrada: " + formato.format(entradaOtraReserva) + "\n" +
+                        "Estado: " + r.getEstado() + "\n\n" +
+                        "Días máximos que puede extender sin conflicto: " +
+                        calcularDiasMaximosExtension(reserva, entradaOtraReserva)
+                    );
+                }
+            }
+        }
+
+        // Si no hay conflictos, proceder con la extensión
         reserva.setDiasEstadia(nuevosDias);
 
         double totalAdicional = reserva.getHabitacion().getPrecioNoche() * diasAdicionales;
@@ -210,6 +242,13 @@ public class ControladorHotel {
         gestor.guardarDatos();
 
         return totalAdicional; // Retornar el monto adicional a pagar
+    }
+
+    private int calcularDiasMaximosExtension(Reserva reservaActual, Date fechaEntradaSiguiente) {
+        long diferenciaMillis = fechaEntradaSiguiente.getTime() - reservaActual.getFechaEntrada().getTime();
+        long diasTotalesDisponibles = diferenciaMillis / (24 * 60 * 60 * 1000);
+        int diasMaximos = (int) diasTotalesDisponibles - reservaActual.getDiasEstadia();
+        return Math.max(0, diasMaximos);
     }
 
     public void cancelarReserva(String numHabitacion) throws Exception {
