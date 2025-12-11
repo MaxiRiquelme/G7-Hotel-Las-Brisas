@@ -166,12 +166,15 @@ public class PanelVenta extends JPanel implements ActualizacionListener {
         }
 
         // 2. Selección Método Pago
-        String[] opciones = {"EFECTIVO", "TARJETA", "CARGO_HABITACION"};
-        int seleccion = JOptionPane.showOptionDialog(this, "Método de Pago", "Pago",
+        String[] opciones = {"Efectivo", "Tarjeta", "Cargo a Habitación"};
+        int seleccion = JOptionPane.showOptionDialog(this, "Seleccione el método de pago", "Método de Pago",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
 
         if (seleccion == -1) return;
-        String metodo = opciones[seleccion];
+
+        // Mapear la selección visual al valor interno del sistema
+        String[] valoresInternos = {"EFECTIVO", "TARJETA", "CARGO_HABITACION"};
+        String metodo = valoresInternos[seleccion];
 
         // 3. Captura datos de pago
         int efectivo = 0;

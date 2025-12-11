@@ -40,14 +40,17 @@ public class PanelInventario extends JPanel implements ActualizacionListener {
         JButton btnAgregar = new JButton("Nuevo Producto");
         JButton btnAumentarStock = new JButton("Aumentar Stock");
         JButton btnReducirStock = new JButton("Reducir Stock");
+        JButton btnEliminar = new JButton("Eliminar Producto");
 
         btnAgregar.addActionListener(e -> agregarProducto());
         btnAumentarStock.addActionListener(e -> aumentarStock());
         btnReducirStock.addActionListener(e -> reducirStock());
+        btnEliminar.addActionListener(e -> eliminarProducto());
 
         panelBotones.add(btnAgregar);
         panelBotones.add(btnAumentarStock);
         panelBotones.add(btnReducirStock);
+        panelBotones.add(btnEliminar);
         add(panelBotones, BorderLayout.SOUTH);
 
         // Registrar listener para actualizaciones automáticas
@@ -133,6 +136,27 @@ public class PanelInventario extends JPanel implements ActualizacionListener {
                 }
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void eliminarProducto() {
+        String id = JOptionPane.showInputDialog(this, "Ingrese ID del producto a eliminar:");
+        if (id != null && !id.trim().isEmpty()) {
+            int confirmacion = JOptionPane.showConfirmDialog(this,
+                "¿Está seguro de que desea eliminar el producto con ID: " + id + "?",
+                "Confirmar Eliminación",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE);
+
+            if (confirmacion == JOptionPane.YES_OPTION) {
+                try {
+                    controlador.eliminarProducto(id);
+                    refrescarTabla();
+                    JOptionPane.showMessageDialog(this, "Producto eliminado exitosamente.");
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
     }

@@ -240,15 +240,16 @@ public class PanelReserva extends JPanel {
         double totalPagar = precioNoche * diasEstadia;
 
         // Paso 4: Seleccionar método de pago
-        String[] opciones = {"EFECTIVO", "TARJETA", "TRANSFERENCIA"};
+        String[] opcionesVisuales = {"Efectivo", "Tarjeta", "Transferencia"};
+        String[] opcionesInternas = {"EFECTIVO", "TARJETA", "TRANSFERENCIA"};
         int seleccion = JOptionPane.showOptionDialog(this,
                 "Total a Pagar: $" + String.format("%.0f", totalPagar) +
                 "\n(" + diasEstadia + " día(s) x $" + String.format("%.0f", precioNoche) + ")" +
-                "\n\nMétodo de Pago:", "Pago",
-                JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
+                "\n\nSeleccione el método de pago:", "Método de Pago",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcionesVisuales, opcionesVisuales[0]);
 
         if (seleccion == -1) return;
-        String metodoPago = opciones[seleccion];
+        String metodoPago = opcionesInternas[seleccion];
 
         // Calcular fecha de salida
         long milisegundos = fechaEntrada.getTime() + ((long) diasEstadia * 24 * 60 * 60 * 1000);

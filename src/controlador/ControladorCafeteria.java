@@ -8,14 +8,12 @@ public class ControladorCafeteria {
     private GestorDatos gestor;
     private List<Producto> productos;
     private List<Huesped> huespedes;
-    private List<Venta> ventas;
     private List<DetalleVenta> carritoActual;
 
     public ControladorCafeteria() {
         this.gestor = GestorDatos.obtenerInstancia();
         this.productos = gestor.obtenerProductos();
         this.huespedes = gestor.obtenerHuespedes();
-        this.ventas = gestor.obtenerVentas();
         this.carritoActual = new ArrayList<>();
     }
 
@@ -56,6 +54,13 @@ public class ControladorCafeteria {
         if (cantidad <= 0) throw new Exception("La cantidad debe ser mayor a 0.");
         if (p.getStock() < cantidad) throw new Exception("Stock insuficiente. Disponible: " + p.getStock());
         p.disminuirStock(cantidad);
+        gestor.guardarDatos();
+    }
+
+    public void eliminarProducto(String id) throws Exception {
+        Producto p = buscarProductoPorId(id);
+        if (p == null) throw new Exception("Producto no encontrado.");
+        productos.remove(p);
         gestor.guardarDatos();
     }
 
@@ -115,6 +120,4 @@ public class ControladorCafeteria {
     public void agregarListener(ActualizacionListener listener) {
         gestor.agregarListener(listener);
     }
-
-    public List<Venta> obtenerVentas() { return ventas; }
 }

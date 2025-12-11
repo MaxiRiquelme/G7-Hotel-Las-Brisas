@@ -13,7 +13,6 @@ public class GestorDatos {
     private List<Reserva> reservas;
     private List<Producto> productos;
     private List<Venta> ventas;
-    private List<Recepcionista> recepcionistas;
 
     private List<ActualizacionListener> listeners = new ArrayList<>();
 
@@ -38,7 +37,6 @@ public class GestorDatos {
                 reservas = (List<Reserva>) ois.readObject();
                 productos = (List<Producto>) ois.readObject();
                 ventas = (List<Venta>) ois.readObject();
-                recepcionistas = (List<Recepcionista>) ois.readObject();
             } catch (Exception e) {
                 inicializarDatos();
             }
@@ -54,7 +52,6 @@ public class GestorDatos {
             oos.writeObject(reservas);
             oos.writeObject(productos);
             oos.writeObject(ventas);
-            oos.writeObject(recepcionistas);
             notificarActualizacion("PRODUCTOS");
         } catch (IOException e) {
             e.printStackTrace();
@@ -67,7 +64,6 @@ public class GestorDatos {
         reservas = new ArrayList<>();
         productos = new ArrayList<>();
         ventas = new ArrayList<>();
-        recepcionistas = new ArrayList<>();
 
         for (int i = 101; i <= 115; i++)
             habitaciones.add(new Habitacion(String.valueOf(i), "Single", 45000.0));
@@ -94,9 +90,6 @@ public class GestorDatos {
         listeners.add(listener);
     }
 
-    public void removerListener(ActualizacionListener listener) {
-        listeners.remove(listener);
-    }
 
     private void notificarActualizacion(String tipo) {
         for (ActualizacionListener listener : listeners) {
@@ -108,8 +101,6 @@ public class GestorDatos {
     public List<Habitacion> obtenerHabitaciones() { return habitaciones; }
     public List<Reserva> obtenerReservas() { return reservas; }
     public List<Producto> obtenerProductos() { return productos; }
-    public List<Venta> obtenerVentas() { return ventas; }
-    public List<Recepcionista> obtenerRecepcionistas() { return recepcionistas; }
 
     public void agregarHuesped(Huesped h) {
         huespedes.add(h);

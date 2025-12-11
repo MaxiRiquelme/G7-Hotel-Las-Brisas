@@ -28,3 +28,18 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+### Java Compiled Files ###
+*.class
+
+# Carpetas compiladas en raíz (NO deben estar aquí)
+/controlador/
+/modelo/
+/vista/
+/sinUso/
+
+### Application Data ###
+*.bin
+datos_cafeteria.bin
+datos_hotel.bin
+datos_sistema.bin
